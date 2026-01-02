@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
