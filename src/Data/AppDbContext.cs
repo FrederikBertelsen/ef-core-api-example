@@ -1,4 +1,4 @@
-using EfCoreApiTemplate.src.Models;
+using EfCoreApiTemplate.src.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfCoreApiTemplate.src.Data;

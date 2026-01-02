@@ -1,6 +1,6 @@
-namespace EfCoreApiTemplate.src.Models;
+namespace EfCoreApiTemplate.src.Entities;
 
-public class Product : BaseModel
+public class Product : BaseEntity
 {
     public required string Name { get; init; }
     public required float Price { get; init; }

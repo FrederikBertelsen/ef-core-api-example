@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EfCoreApiTemplate.src.Models;
+namespace EfCoreApiTemplate.src.Entities;
 
-public class Order : BaseModel
+public class Order : BaseEntity
 {
     public Guid CustomerId { get; set; }
     public Customer? Customer { get; init; }

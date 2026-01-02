@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EfCoreApiTemplate.src.Models;
+namespace EfCoreApiTemplate.src.Entities;
 
-public class Customer : BaseModel
+public class Customer : BaseEntity
 {
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
