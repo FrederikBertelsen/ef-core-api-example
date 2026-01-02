@@ -16,6 +16,8 @@ public class Order : BaseEntity
         IsCompleted = true;
     }
 
+    public DateTime CreatedAt { get; init; } = DateTime.Now;
+
     [NotMapped]
     public float TotalPrice => Products.Sum(p => p.Price);
 }
