@@ -2,7 +2,6 @@ using System.Data;
 using EfCoreApiTemplate.src.Data;
 using EfCoreApiTemplate.src.DTOs;
 using EfCoreApiTemplate.src.Extensions;
-using EfCoreApiTemplate.src.Mapping;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

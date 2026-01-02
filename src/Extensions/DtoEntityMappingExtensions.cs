@@ -1,8 +1,7 @@
 using EfCoreApiTemplate.src.DTOs;
 using EfCoreApiTemplate.src.Entities;
-using EfCoreApiTemplate.src.Extensions;
 
-namespace EfCoreApiTemplate.src.Mapping;
+namespace EfCoreApiTemplate.src.Extensions;
 
 public static class EntityDtoMappingExtensions
 {
