@@ -2,7 +2,7 @@ using EfCoreApiTemplate.src.DTOs;
 
 namespace EfCoreApiTemplate.src.Extensions;
 
-public static class CustomerValidationExtensions
+public static class DtoValidationExtensions
 {
     public static void ValidateOrThrow(this CreateCustomerDto createCustomerDto)
     {
