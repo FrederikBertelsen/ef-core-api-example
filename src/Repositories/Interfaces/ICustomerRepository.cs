@@ -4,7 +4,7 @@ namespace EfCoreApiTemplate.src.Repositories.Interfaces;
 
 public interface ICustomerRepository
 {
-    public Task<CustomerDto> CreateCustomer(CreateCustomerDto newCustomer);
-    public Task<CustomerDto> PatchCustomer(CustomerDto customer);
+    public Task<CustomerDto> CreateCustomer(CreateCustomerDto createCustomerDto);
+    public Task<CustomerDto> PatchCustomer(CustomerDto customerDto);
     public Task DeleteCustomer(Guid customerId);
 }

@@ -10,32 +10,17 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
 {
-    public async Task<CustomerDto> CreateCustomer(CreateCustomerDto newCustomer)
+    public async Task<CustomerDto> CreateCustomer(CreateCustomerDto createCustomerDto)
     {
-        newCustomer.ValidateOrThrow();
+        createCustomerDto.ValidateOrThrow();
 
-        if (await dbContext.Customers.AnyAsync(customer => customer.Email == newCustomer.Email))
-            throw new ArgumentException($"A Customer with Email '{newCustomer.Email}' already exists");
+        if (await dbContext.Customers.AnyAsync(customer => customer.Email == createCustomerDto.Email))
+            throw new ArgumentException($"A Customer with Email '{createCustomerDto.Email}' already exists");
 
-        var entity = (await dbContext.Customers.AddAsync(newCustomer.ToEntity())).Entity;
+        var entity = (await dbContext.Customers.AddAsync(createCustomerDto.ToEntity())).Entity;
         await dbContext.SaveChangesAsync();
 
         return entity.ToDto();
-    }
-
-    public async Task DeleteCustomer(Guid customerId)
-    {
-        if (customerId == Guid.Empty)
-            throw new ArgumentException($"The Customer ID cannot be empty");
-
-        var deleted = await dbContext.Customers
-            .Where(c => c.Id == customerId)
-            .ExecuteDeleteAsync();
-
-        if (deleted == 0)
-            throw new ArgumentException($"No customer found with ID '{customerId}'");
-
-        await dbContext.SaveChangesAsync();
     }
 
     public async Task<CustomerDto> PatchCustomer(CustomerDto customerDto)
@@ -78,5 +63,20 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         await dbContext.SaveChangesAsync();
 
         return customer.ToDto();
+    }
+
+    public async Task DeleteCustomer(Guid customerId)
+    {
+        if (customerId == Guid.Empty)
+            throw new ArgumentException($"The Customer ID cannot be empty");
+
+        var deleted = await dbContext.Customers
+            .Where(c => c.Id == customerId)
+            .ExecuteDeleteAsync();
+
+        if (deleted == 0)
+            throw new ArgumentException($"No customer found with ID '{customerId}'");
+
+        await dbContext.SaveChangesAsync();
     }
 }
