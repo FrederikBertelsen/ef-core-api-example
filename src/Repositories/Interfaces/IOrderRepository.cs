@@ -1,6 +1,8 @@
 using EfCoreApiTemplate.src.DTOs;
 
-interface IOrderRepository
+namespace EfCoreApiTemplate.src.Repositories.Interfaces;
+
+public interface IOrderRepository
 {
     public Task<OrderDto> CreateOrder(CreateOrderDto order);
     public Task AddProductsToOrder(Guid orderId, ICollection<Guid> productIds);

@@ -1,6 +1,8 @@
 using EfCoreApiTemplate.src.DTOs;
 
-interface ICustomerRepository
+namespace EfCoreApiTemplate.src.Repositories.Interfaces;
+
+public interface ICustomerRepository
 {
     public Task<CustomerDto> CreateCustomer(CreateCustomerDto newCustomer);
     public Task<CustomerDto> PatchCustomer(CustomerDto customer);

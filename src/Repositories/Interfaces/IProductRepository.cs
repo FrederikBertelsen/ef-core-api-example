@@ -1,6 +1,8 @@
 using EfCoreApiTemplate.src.DTOs;
 
-interface IProductRepository
+namespace EfCoreApiTemplate.src.Repositories.Interfaces;
+
+public interface IProductRepository
 {
     public Task<ProductDto> CreateProduct(CreateProductDto product);
     public Task<ProductDto> PatchProduct(ProductDto product);
