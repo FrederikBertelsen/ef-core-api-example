@@ -1,9 +1,12 @@
 using EfCoreApiTemplate.src.Data;
+using EfCoreApiTemplate.src.Repositories;
+using EfCoreApiTemplate.src.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data Source=app.db"));
 
