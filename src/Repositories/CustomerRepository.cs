@@ -69,13 +69,12 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         if (customerId == Guid.Empty)
             throw new ArgumentException($"The Customer ID cannot be empty");
 
-        var deleted = await dbContext.Customers
-            .Where(c => c.Id == customerId)
-            .ExecuteDeleteAsync();
+        var customer = await dbContext.Customers.FindAsync(customerId);
 
-        if (deleted == 0)
+        if (customer is null)
             throw new ArgumentException($"No customer found with ID '{customerId}'");
 
+        dbContext.Customers.Remove(customer);
         await dbContext.SaveChangesAsync();
     }
 }
