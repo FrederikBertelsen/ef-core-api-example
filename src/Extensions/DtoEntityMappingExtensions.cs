@@ -6,20 +6,7 @@ namespace EfCoreApiTemplate.src.Mapping;
 
 public static class EntityDtoMappingExtensions
 {
-    public static Customer ToEntity(this CustomerDto customerDto)
-    {
-        customerDto.ValidateOrThrow();
-
-        return new()
-        {
-            Id = customerDto.Id,
-            FirstName = customerDto.FirstName!,
-            LastName = customerDto.LastName!,
-            Email = customerDto.Email!,
-            Address = customerDto.Address!,
-        };
-    }
-
+    #region Customer Mappings
     public static Customer ToEntity(this CreateCustomerDto createCustomerDto)
     {
         createCustomerDto.ValidateOrThrow();
@@ -33,6 +20,20 @@ public static class EntityDtoMappingExtensions
         };
     }
 
+        public static Customer ToEntity(this CustomerDto customerDto)
+    {
+        customerDto.ValidateOrThrow();
+
+        return new()
+        {
+            Id = customerDto.Id,
+            FirstName = customerDto.FirstName!,
+            LastName = customerDto.LastName!,
+            Email = customerDto.Email!,
+            Address = customerDto.Address!,
+        };
+    }
+
     public static CustomerDto ToDto(this Customer customer)
     {
         return new(
@@ -43,4 +44,38 @@ public static class EntityDtoMappingExtensions
             Address: customer.Address
         );
     }
+
+    #endregion
+
+    #region Product Mappings
+    public static Product ToEntity(this CreateProductDto createProductDto)
+    {
+        createProductDto.ValidateOrThrow();
+        return new()
+        {
+            Name = createProductDto.Name!,
+            Price = createProductDto.Price,
+        };
+    }
+    public static Product ToEntity(this ProductDto productDto)
+    {
+        productDto.ValidateOrThrow();
+
+        return new()
+        {
+            Id = productDto.Id,
+            Name = productDto.Name!,
+            Price = (float)productDto.Price!,
+        };
+    }
+
+    public static ProductDto ToDto(this Product product)
+    {
+        return new(
+            Id: product.Id,
+            Name: product.Name,
+            Price: product.Price
+        );
+    }
+    #endregion
 }
