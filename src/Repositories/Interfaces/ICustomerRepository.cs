@@ -2,7 +2,7 @@ using EfCoreApiTemplate.src.DTOs;
 
 interface ICustomerRepository
 {
-    public Task<CustomerDto> CreateCustomer(CreateCustomerDto NewCustomer);
-    public Task<CustomerDto> PatchCustomer(CustomerDto Customer);
-    public Task DeleteCustomer(Guid CustomerId);
+    public Task<CustomerDto> CreateCustomer(CreateCustomerDto newCustomer);
+    public Task<CustomerDto> PatchCustomer(CustomerDto customer);
+    public Task DeleteCustomer(Guid customerId);
 }
