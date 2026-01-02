@@ -20,6 +20,8 @@ public static class CustomerValidationExtensions
     public static void ValidateOrThrow(this CustomerDto CustomerDto)
     {
         ArgumentNullException.ThrowIfNull(CustomerDto);
+        if (CustomerDto.Id == Guid.Empty)
+            throw new ArgumentException("The Customer is missing an Id");
         if (string.IsNullOrWhiteSpace(CustomerDto.FirstName))
             throw new ArgumentException("The Customer is missing a first name");
         if (string.IsNullOrWhiteSpace(CustomerDto.LastName))
