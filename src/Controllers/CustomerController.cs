@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EfCoreApiTemplate.src.Controllers;
 
-[Route("api/Customers")]
+[Route("api/customers")]
 [ApiController]
 public class CustomerController(ICustomerRepository customerRepository) : ControllerBase
 {

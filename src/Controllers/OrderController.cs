@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EfCoreApiTemplate.src.Controllers;
 
-[Route("api/Orders")]
+[Route("api/orders")]
 [ApiController]
 public class OrderController(IOrderRepository orderRepository) : ControllerBase
 {

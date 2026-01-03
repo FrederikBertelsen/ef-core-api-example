@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EfCoreApiTemplate.src.Controllers;
 
-[Route("api/Products")]
+[Route("api/products")]
 [ApiController]
 public class ProductController(IProductRepository productRepository) : ControllerBase
 {
@@ -15,14 +15,14 @@ public class ProductController(IProductRepository productRepository) : Controlle
         return Ok(productDto);
     }
 
-    [HttpPatch("{productId:guid}/price/{newPrice:float}")]
+    [HttpPatch]
     public async Task<ActionResult<ProductDto>> UpdatePrice(Guid productId, float newPrice)
     {
         var updatedProduct = await productRepository.UpdatePrice(productId, newPrice);
         return Ok(updatedProduct);
     }
 
-    [HttpDelete("{productId:guid}")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteProduct(Guid productId)
     {
         await productRepository.DeleteProduct(productId);

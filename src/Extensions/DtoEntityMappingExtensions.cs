@@ -8,8 +8,6 @@ public static class EntityDtoMappingExtensions
     #region Customer Mappings
     public static Customer ToEntity(this CreateCustomerDto createCustomerDto)
     {
-        createCustomerDto.ValidateOrThrow();
-
         return new()
         {
             FirstName = createCustomerDto.FirstName!,
@@ -21,8 +19,6 @@ public static class EntityDtoMappingExtensions
 
     public static Customer ToEntity(this CustomerDto customerDto)
     {
-        customerDto.ValidateOrThrow();
-
         return new()
         {
             Id = customerDto.Id,
@@ -49,8 +45,6 @@ public static class EntityDtoMappingExtensions
     #region Product Mappings
     public static Product ToEntity(this CreateProductDto createProductDto)
     {
-        createProductDto.ValidateOrThrow();
-
         return new()
         {
             Name = createProductDto.Name!,
@@ -59,8 +53,6 @@ public static class EntityDtoMappingExtensions
     }
     public static Product ToEntity(this ProductDto productDto)
     {
-        productDto.ValidateOrThrow();
-
         return new()
         {
             Id = productDto.Id,
