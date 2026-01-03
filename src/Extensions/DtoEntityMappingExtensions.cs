@@ -19,7 +19,7 @@ public static class EntityDtoMappingExtensions
         };
     }
 
-        public static Customer ToEntity(this CustomerDto customerDto)
+    public static Customer ToEntity(this CustomerDto customerDto)
     {
         customerDto.ValidateOrThrow();
 
@@ -50,6 +50,7 @@ public static class EntityDtoMappingExtensions
     public static Product ToEntity(this CreateProductDto createProductDto)
     {
         createProductDto.ValidateOrThrow();
+
         return new()
         {
             Name = createProductDto.Name!,
@@ -77,4 +78,25 @@ public static class EntityDtoMappingExtensions
         );
     }
     #endregion
+
+    #region Order Mappings
+    public static OrderItemDto ToDto(this OrderItem orderItem)
+    {
+        return new(
+            Product: orderItem.Product.ToDto(),
+            Quantity: orderItem.Quantity
+        );
+    }
+
+    public static OrderDto ToDto(this Order order)
+    {
+        return new(
+            Id: order.Id,
+            CustomerId: order.CustomerId,
+            OrderItems: order.OrderItems.Select(orderItem => orderItem.ToDto()).ToList(),
+            CreatedAt: order.CreatedAt
+        );
+    }
+    #endregion
+
 }
