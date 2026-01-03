@@ -6,8 +6,10 @@ namespace EfCoreApiTemplate.src.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<Customer> Customers { get; init; }
-    public DbSet<Product> Products { get; init; }
     public DbSet<Order> Orders { get; init; }
+    public DbSet<OrderItem> OrderItems {get; init;}
+    public DbSet<Product> Products { get; init; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,8 +19,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithOne(order => order.Customer)
             .HasForeignKey(order => order.CustomerId);
 
-        // Order => Product
+        // Order => OrderItems
         modelBuilder.Entity<Order>()
-            .HasMany(order => order.Products);
+            .HasMany(order => order.OrderItems)
+            .WithOne(orderItem => orderItem.Order)
+            .HasForeignKey(orderItem => orderItem.OrderId);
+        
+        // OrderItems => Product
+        modelBuilder.Entity<OrderItem>()
+            .HasOne(orderItem => orderItem.Product);
     }
 }
