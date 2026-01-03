@@ -119,7 +119,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task MarkOrderAsComplete(Guid orderId)
+    public async Task MarkOrderAsCompleted(Guid orderId)
     {
         var order = await GetOrderById(orderId);
 

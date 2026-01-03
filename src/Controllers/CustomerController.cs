@@ -23,7 +23,7 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
         return Ok(updatedCustomer);
     }
 
-    [HttpDelete("{customerId:guid}")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteCustomer(Guid customerId)
     {
         await customerRepository.DeleteCustomer(customerId);
