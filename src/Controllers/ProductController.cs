@@ -15,7 +15,7 @@ public class ProductController(IProductRepository productRepository) : Controlle
         return Ok(productDto);
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<ActionResult<ProductDto>> UpdatePrice(Guid productId, float newPrice)
     {
         var updatedProduct = await productRepository.UpdatePrice(productId, newPrice);

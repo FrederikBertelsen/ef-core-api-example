@@ -15,21 +15,21 @@ public class OrderController(IOrderRepository orderRepository) : ControllerBase
         return Ok(orderDto);
     }
 
-    [HttpPatch("AddProducts")]
+    [HttpPut("AddProducts")]
     public async Task<IActionResult> AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd)
     {
         await orderRepository.AddProductsToOrder(orderId, productsToAdd);
         return NoContent();
     }
 
-    [HttpPatch("RemoveProducts")]
+    [HttpPut("RemoveProducts")]
     public async Task<IActionResult> RemoveProductsFromOrder(Guid orderId, ICollection<OrderItemDto> productsToRemove)
     {
         await orderRepository.RemoveProductsFromOrder(orderId, productsToRemove);
         return NoContent();
     }
 
-    [HttpPatch("MarkAsCompleted")]
+    [HttpPut("MarkAsCompleted")]
     public async Task<IActionResult> MarkOrderAsCompleted(Guid orderId)
     {
         await orderRepository.MarkOrderAsCompleted(orderId);

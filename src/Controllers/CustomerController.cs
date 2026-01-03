@@ -16,7 +16,7 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
         return Ok(customerDto);
     }
 
-    [HttpPatch]
+    [HttpPut]
     public async Task<ActionResult<CustomerDto>> PatchCustomer(CustomerDto customerDto)
     {
         var updatedCustomer = await customerRepository.PatchCustomer(customerDto);
