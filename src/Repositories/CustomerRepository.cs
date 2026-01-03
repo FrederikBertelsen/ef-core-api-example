@@ -22,6 +22,18 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return entity.ToDto();
     }
 
+    public async Task<CustomerDto> GetCustomerById(Guid customerId)
+    {
+        if (customerId == Guid.Empty)
+            throw new ArgumentException($"The Customer ID cannot be empty");
+        
+        var customer = await dbContext.Customers.FindAsync(customerId);
+        if (customer is null)
+            throw new ArgumentException($"No customer found with ID '{customerId}'");
+
+        return customer.ToDto();
+    }
+
     public async Task<CustomerDto> PatchCustomer(CustomerDto customerDto)
     {
         ArgumentNullException.ThrowIfNull(customerDto);

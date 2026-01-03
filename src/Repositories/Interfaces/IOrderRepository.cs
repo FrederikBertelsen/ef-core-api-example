@@ -5,6 +5,7 @@ namespace EfCoreApiTemplate.src.Repositories.Interfaces;
 public interface IOrderRepository
 {
     public Task<OrderDto> CreateOrder(CreateOrderDto createOrderDto);
+    public Task<OrderDto> GetOrderById(Guid orderId);
     public Task AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd);
     public Task RemoveProductsFromOrder(Guid orderId, ICollection<OrderItemDto> productsToRemove);
     public Task MarkOrderAsCompleted(Guid orderId);

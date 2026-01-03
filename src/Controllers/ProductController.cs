@@ -15,6 +15,13 @@ public class ProductController(IProductRepository productRepository) : Controlle
         return Ok(productDto);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<ProductDto>> GetProductById(Guid productId)
+    {
+        var productDto = await productRepository.GetProductById(productId);
+        return Ok(productDto);
+    }
+
     [HttpPut]
     public async Task<ActionResult<ProductDto>> UpdatePrice(Guid productId, float newPrice)
     {

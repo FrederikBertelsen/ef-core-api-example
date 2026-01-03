@@ -9,26 +9,6 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 {
-    private async Task<Order> GetOrderById(Guid orderId, bool includeItems = false)
-    {
-        if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
-
-        Order? order;
-        if (includeItems)
-            order = await dbContext.Orders
-            .Include(order => order.OrderItems)
-            .ThenInclude(orderItem => orderItem.Product)
-            .FirstOrDefaultAsync(order => order.Id == orderId);
-        else
-            order = await dbContext.Orders.FindAsync(orderId);
-
-        if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
-
-        return order;
-    }
-
     public async Task<OrderDto> CreateOrder(CreateOrderDto createOrderDto)
     {
         createOrderDto.ValidateOrThrow();
@@ -66,11 +46,26 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         return order.ToDto();
     }
 
+    public async Task<OrderDto> GetOrderById(Guid orderId)
+    {
+        if (orderId == Guid.Empty)
+            throw new ArgumentException("orderId cannot be empty");
+        
+        var order = await dbContext.Orders
+            .Include(order => order.OrderItems)
+            .ThenInclude(orderItem => orderItem.Product)
+            .FirstOrDefaultAsync(order => order.Id == orderId);
+        if (order is null)
+            throw new ArgumentException($"No order found with ID '{orderId}'");
+        
+        return order.ToDto();
+    }
+
     public async Task AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd)
     {
         productsToAdd.ValidateOrThrow();
 
-        var order = await GetOrderById(orderId, includeItems: true);
+        var order = await GetOrderAndValidate(orderId, includeItems: true);
 
         // add product, or increase quantity if it already exists
         foreach (var productDto in productsToAdd)
@@ -99,7 +94,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
     {
         productsToRemove.ValidateOrThrow();
 
-        var order = await GetOrderById(orderId, includeItems: true);
+        var order = await GetOrderAndValidate(orderId, includeItems: true);
 
         // decrease quantity, or remove item if it exists or quantity reaches zero
         foreach (var productDto in productsToRemove)
@@ -121,7 +116,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 
     public async Task MarkOrderAsCompleted(Guid orderId)
     {
-        var order = await GetOrderById(orderId);
+        var order = await GetOrderAndValidate(orderId);
 
         order.MarkAsCompleted();
 
@@ -130,10 +125,30 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 
     public async Task DeleteOrder(Guid orderId)
     {
-        var order = await GetOrderById(orderId);
+        var order = await GetOrderAndValidate(orderId);
 
         dbContext.Orders.Remove(order);
 
         await dbContext.SaveChangesAsync();
+    }
+
+    private async Task<Order> GetOrderAndValidate(Guid orderId, bool includeItems = false)
+    {
+        if (orderId == Guid.Empty)
+            throw new ArgumentException("orderId cannot be empty");
+
+        Order? order;
+        if (includeItems)
+            order = await dbContext.Orders
+            .Include(order => order.OrderItems)
+            .ThenInclude(orderItem => orderItem.Product)
+            .FirstOrDefaultAsync(order => order.Id == orderId);
+        else
+            order = await dbContext.Orders.FindAsync(orderId);
+
+        if (order is null)
+            throw new ArgumentException($"No order found with ID '{orderId}'");
+
+        return order;
     }
 }

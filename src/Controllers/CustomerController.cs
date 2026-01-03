@@ -16,6 +16,13 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
         return Ok(customerDto);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<CustomerDto>> GetCustomerById(Guid customerId)
+    {
+        var customerDto = await customerRepository.GetCustomerById(customerId);
+        return Ok(customerDto);
+    }
+
     [HttpPut]
     public async Task<ActionResult<CustomerDto>> PatchCustomer(CustomerDto customerDto)
     {

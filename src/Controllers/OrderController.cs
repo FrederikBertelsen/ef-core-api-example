@@ -15,6 +15,13 @@ public class OrderController(IOrderRepository orderRepository) : ControllerBase
         return Ok(orderDto);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<OrderDto>> GetOrderById(Guid orderId)
+    {
+        var orderDto = await orderRepository.GetOrderById(orderId);
+        return Ok(orderDto);
+    }
+
     [HttpPut("AddProducts")]
     public async Task<IActionResult> AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd)
     {
