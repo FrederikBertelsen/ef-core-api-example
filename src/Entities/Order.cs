@@ -6,7 +6,7 @@ public class Order : BaseEntity
 {
     public Guid CustomerId { get; set; }
     public Customer? Customer { get; init; }
-    public required ICollection<Product> Products { get; init; }
+    public required ICollection<OrderItem> OrderItems { get; init; }
     public bool IsCompleted { get; private set; } = false;
     public void MarkAsCompleted()
     {
@@ -19,5 +19,5 @@ public class Order : BaseEntity
     public DateTime CreatedAt { get; init; } = DateTime.Now;
 
     [NotMapped]
-    public float TotalPrice => Products.Sum(p => p.Price);
+    public float TotalPrice => OrderItems.Sum(p => p.Product.Price * p.Quantity);
 }

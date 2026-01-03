@@ -3,6 +3,6 @@ namespace EfCoreApiTemplate.src.DTOs;
 public record OrderDto(
     Guid Id,
     Guid CustomerId,
-    ICollection<ProductDto> Products,
+    ICollection<OrderItemDto> OrderItems,
     DateTime CreatedAt
 );

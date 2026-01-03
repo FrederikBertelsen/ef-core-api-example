@@ -1,4 +1,6 @@
+namespace EfCoreApiTemplate.src.DTOs;
+
 public record CreateOrderDto(
     Guid CustomerId,
-    ICollection<Guid> productIds
+    ICollection<CreateOrderItemDto> OrderItemDtos
 );
