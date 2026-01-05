@@ -1,13 +1,12 @@
 using EfCoreApiTemplate.src.DTOs;
+using EfCoreApiTemplate.src.Entities;
 
 namespace EfCoreApiTemplate.src.Repositories.Interfaces;
 
 public interface IOrderRepository
 {
-    public Task<OrderDto> CreateOrderAsync(CreateOrderDto createOrderDto);
-    public Task<OrderDto> GetOrderByIdAsync(Guid orderId);
-    public Task AddProductsToOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToAdd);
-    public Task RemoveProductsFromOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToRemove);
-    public Task MarkOrderAsCompletedAsync(Guid orderId);
-    public Task DeleteOrderAsync(Guid orderId);
+    public Task<Order> CreateOrderAsync(Order order);
+    public Task<Order?> GetOrderByIdAsync(Guid orderId);
+    public void DeleteOrder(Order order);
+    public Task SaveChangesAsync();
 }

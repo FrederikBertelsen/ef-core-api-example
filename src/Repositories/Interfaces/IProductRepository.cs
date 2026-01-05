@@ -7,6 +7,7 @@ public interface IProductRepository
 {
     public Task<Product> CreateProductAsync(Product product);
     public Task<Product?> GetProductByIdAsync(Guid productId);
+    public Task<ICollection<Product>> GetProductsByIdAsync(ICollection<Guid> productIds);
     public Task<Product?> GetProductByNameAsync(string productName);
     public Product UpdateProduct(Product product);
     public void DeleteProduct(Product product);
