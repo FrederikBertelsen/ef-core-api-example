@@ -1,7 +1,5 @@
-using System.Data;
 using EfCoreApiTemplate.src.Data;
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Extensions;
+using EfCoreApiTemplate.src.Entities;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,84 +7,12 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
 {
-    public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
-    {
-        createCustomerDto.ValidateOrThrow();
-
-        if (await dbContext.Customers.AnyAsync(customer => customer.Email == createCustomerDto.Email))
-            throw new ArgumentException($"A Customer with Email '{createCustomerDto.Email}' already exists");
-
-        var entity = (await dbContext.Customers.AddAsync(createCustomerDto.ToEntity())).Entity;
-        await dbContext.SaveChangesAsync();
-
-        return entity.ToDto();
-    }
-
-    public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
-    {
-        if (customerId == Guid.Empty)
-            throw new ArgumentException($"The Customer ID cannot be empty");
-
-        var customer = await dbContext.Customers.FindAsync(customerId);
-        if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{customerId}'");
-
-        return customer.ToDto();
-    }
-
-    public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
-    {
-        ArgumentNullException.ThrowIfNull(customerDto);
-        if (customerDto.Id == Guid.Empty)
-            throw new ArgumentException($"The Customer is missing an ID");
-
-        var customer = await dbContext.Customers.FindAsync(customerDto.Id);
-
-        if (customer is null)
-            throw new ArgumentException($"No Customer found with ID '{customerDto.Id}'");
-
-        bool updated = false;
-
-        if (!string.IsNullOrWhiteSpace(customerDto.FirstName))
-        {
-            customer.FirstName = customerDto.FirstName;
-            updated = true;
-        }
-        if (!string.IsNullOrWhiteSpace(customerDto.LastName))
-        {
-            customer.LastName = customerDto.LastName;
-            updated = true;
-        }
-        if (!string.IsNullOrWhiteSpace(customerDto.Email))
-        {
-            customer.Email = customerDto.Email;
-            updated = true;
-        }
-        if (!string.IsNullOrWhiteSpace(customerDto.Address))
-        {
-            customer.Address = customerDto.Address;
-            updated = true;
-        }
-
-        if (!updated)
-            throw new ArgumentException($"No new values provided to patch the customer");
-
-        await dbContext.SaveChangesAsync();
-
-        return customer.ToDto();
-    }
-
-    public async Task DeleteCustomerAsync(Guid customerId)
-    {
-        if (customerId == Guid.Empty)
-            throw new ArgumentException($"The Customer ID cannot be empty");
-
-        var customer = await dbContext.Customers.FindAsync(customerId);
-
-        if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{customerId}'");
-
-        dbContext.Customers.Remove(customer);
-        await dbContext.SaveChangesAsync();
-    }
+    public async Task<Customer> CreateCustomerAsync(Customer customer) => (await dbContext.Customers.AddAsync(customer)).Entity;
+    public async Task<Customer?> GetCustomerByIdAsync(Guid customerId) => await dbContext.Customers.FindAsync(customerId);
+    public async Task<Customer?> GetCustomerByEmailAsync(string email) => await dbContext.Customers.FirstOrDefaultAsync(c => c.Email == email);
+    public Customer UpdateCustomer(Customer customer) => dbContext.Customers.Update(customer).Entity;
+    public void DeleteCustomer(Customer customer) => dbContext.Customers.Remove(customer);
+    public Task<bool> CustomerExistsByIdAsync(Guid customerId) => dbContext.Customers.AnyAsync(c => c.Id == customerId);
+    public Task<bool> CustomerExistsByEmailAsync(string email) => dbContext.Customers.AnyAsync(c => c.Email == email);
+    public Task SaveChangesAsync() => dbContext.SaveChangesAsync();
 }

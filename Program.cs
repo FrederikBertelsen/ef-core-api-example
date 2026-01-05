@@ -1,11 +1,15 @@
 using EfCoreApiTemplate.src.Data;
 using EfCoreApiTemplate.src.Repositories;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
+using EfCoreApiTemplate.src.Services;
+using EfCoreApiTemplate.src.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
