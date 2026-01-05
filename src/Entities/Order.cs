@@ -18,6 +18,20 @@ public class Order : BaseEntity
 
     public DateTime CreatedAt { get; init; } = DateTime.Now;
 
-    [NotMapped]
-    public float TotalPrice => OrderItems.Sum(p => p.Product.Price * p.Quantity);
+    public float TotalPrice()
+    {
+        if (OrderItems == null || OrderItems.Count == 0)
+            return 0f;
+
+        float total = 0f;
+        foreach (var orderItem in OrderItems)
+        {
+            if (orderItem == null || orderItem.Product == null || orderItem.Product.Price == null)
+                continue;
+
+            total += (float)orderItem.Product.Price * orderItem.Quantity;
+        }
+
+        return total;
+    }
 }

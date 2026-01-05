@@ -1,38 +1,38 @@
 using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Repositories.Interfaces;
+using EfCoreApiTemplate.src.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EfCoreApiTemplate.src.Controllers;
 
 [Route("api/products")]
 [ApiController]
-public class ProductController(IProductRepository productRepository) : ControllerBase
+public class ProductController(IProductService productService) : ControllerBase
 {
     [HttpPost]
     public async Task<ActionResult<ProductDto>> CreateProduct(CreateProductDto newProductDto)
     {
-        var productDto = await productRepository.CreateProductAsync(newProductDto);
+        var productDto = await productService.CreateProductAsync(newProductDto);
         return Ok(productDto);
     }
 
     [HttpGet]
     public async Task<ActionResult<ProductDto>> GetProductById(Guid productId)
     {
-        var productDto = await productRepository.GetProductByIdAsync(productId);
+        var productDto = await productService.GetProductByIdAsync(productId);
         return Ok(productDto);
     }
 
     [HttpPut]
-    public async Task<ActionResult<ProductDto>> UpdatePrice(Guid productId, float newPrice)
+    public async Task<ActionResult<ProductDto>> UpdateProduct(ProductDto productDto)
     {
-        var updatedProduct = await productRepository.UpdatePriceAsync(productId, newPrice);
+        var updatedProduct = await productService.UpdateProductAsync(productDto);
         return Ok(updatedProduct);
     }
 
     [HttpDelete]
     public async Task<IActionResult> DeleteProduct(Guid productId)
     {
-        await productRepository.DeleteProductAsync(productId);
+        await productService.DeleteProductAsync(productId);
         return NoContent();
     }
 }
