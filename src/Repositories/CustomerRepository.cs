@@ -34,7 +34,7 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return customer.ToDto();
     }
 
-    public async Task<CustomerDto> PatchCustomerAsync(CustomerDto customerDto)
+    public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
     {
         ArgumentNullException.ThrowIfNull(customerDto);
         if (customerDto.Id == Guid.Empty)
