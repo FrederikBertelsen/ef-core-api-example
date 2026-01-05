@@ -4,10 +4,10 @@ namespace EfCoreApiTemplate.src.Repositories.Interfaces;
 
 public interface IOrderRepository
 {
-    public Task<OrderDto> CreateOrder(CreateOrderDto createOrderDto);
-    public Task<OrderDto> GetOrderById(Guid orderId);
-    public Task AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd);
-    public Task RemoveProductsFromOrder(Guid orderId, ICollection<OrderItemDto> productsToRemove);
-    public Task MarkOrderAsCompleted(Guid orderId);
-    public Task DeleteOrder(Guid orderId);
+    public Task<OrderDto> CreateOrderAsync(CreateOrderDto createOrderDto);
+    public Task<OrderDto> GetOrderByIdAsync(Guid orderId);
+    public Task AddProductsToOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToAdd);
+    public Task RemoveProductsFromOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToRemove);
+    public Task MarkOrderAsCompletedAsync(Guid orderId);
+    public Task DeleteOrderAsync(Guid orderId);
 }

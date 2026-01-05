@@ -8,7 +8,7 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class ProductRepository(AppDbContext dbContext) : IProductRepository
 {
-    public async Task<ProductDto> CreateProduct(CreateProductDto createProductDto)
+    public async Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto)
     {
         createProductDto.ValidateOrThrow();
 
@@ -21,20 +21,20 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
         return entity.ToDto();
     }
 
-    public async Task<ProductDto> GetProductById(Guid productId)
+    public async Task<ProductDto> GetProductByIdAsync(Guid productId)
     {
         if (productId == Guid.Empty)
             throw new ArgumentException("The Product ID cannot be empty");
-        
+
         var product = await dbContext.Products.FindAsync(productId);
 
         if (product is null)
             throw new ArgumentException($"No Product found with ID '{productId}'");
-        
+
         return product.ToDto();
     }
 
-    public async Task<ProductDto> UpdatePrice(Guid productId, float newPrice)
+    public async Task<ProductDto> UpdatePriceAsync(Guid productId, float newPrice)
     {
         if (productId == Guid.Empty)
             throw new ArgumentException("The Product ID cannot be empty");
@@ -52,11 +52,11 @@ public class ProductRepository(AppDbContext dbContext) : IProductRepository
         return product.ToDto();
     }
 
-    public async Task DeleteProduct(Guid productId)
+    public async Task DeleteProductAsync(Guid productId)
     {
         if (productId == Guid.Empty)
             throw new ArgumentException("The Product ID cannot be empty");
-        
+
         var product = await dbContext.Products.FindAsync(productId);
         if (product is null)
             throw new ArgumentException($"No Product found with ID '{productId}'");

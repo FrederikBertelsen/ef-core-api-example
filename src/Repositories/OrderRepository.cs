@@ -9,7 +9,7 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 {
-    public async Task<OrderDto> CreateOrder(CreateOrderDto createOrderDto)
+    public async Task<OrderDto> CreateOrderAsync(CreateOrderDto createOrderDto)
     {
         createOrderDto.ValidateOrThrow();
 
@@ -46,22 +46,22 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         return order.ToDto();
     }
 
-    public async Task<OrderDto> GetOrderById(Guid orderId)
+    public async Task<OrderDto> GetOrderByIdAsync(Guid orderId)
     {
         if (orderId == Guid.Empty)
             throw new ArgumentException("orderId cannot be empty");
-        
+
         var order = await dbContext.Orders
             .Include(order => order.OrderItems)
             .ThenInclude(orderItem => orderItem.Product)
             .FirstOrDefaultAsync(order => order.Id == orderId);
         if (order is null)
             throw new ArgumentException($"No order found with ID '{orderId}'");
-        
+
         return order.ToDto();
     }
 
-    public async Task AddProductsToOrder(Guid orderId, ICollection<OrderItemDto> productsToAdd)
+    public async Task AddProductsToOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToAdd)
     {
         productsToAdd.ValidateOrThrow();
 
@@ -90,7 +90,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task RemoveProductsFromOrder(Guid orderId, ICollection<OrderItemDto> productsToRemove)
+    public async Task RemoveProductsFromOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToRemove)
     {
         productsToRemove.ValidateOrThrow();
 
@@ -114,7 +114,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task MarkOrderAsCompleted(Guid orderId)
+    public async Task MarkOrderAsCompletedAsync(Guid orderId)
     {
         var order = await GetOrderAndValidate(orderId);
 
@@ -123,7 +123,7 @@ public class OrderRepository(AppDbContext dbContext) : IOrderRepository
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteOrder(Guid orderId)
+    public async Task DeleteOrderAsync(Guid orderId)
     {
         var order = await GetOrderAndValidate(orderId);
 

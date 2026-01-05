@@ -4,8 +4,8 @@ namespace EfCoreApiTemplate.src.Repositories.Interfaces;
 
 public interface IProductRepository
 {
-    public Task<ProductDto> CreateProduct(CreateProductDto createProductDto);
-    public Task<ProductDto> GetProductById(Guid productId);
-    public Task<ProductDto> UpdatePrice(Guid productId, float newPrice);
-    public Task DeleteProduct(Guid productId);
+    public Task<ProductDto> CreateProductAsync(CreateProductDto createProductDto);
+    public Task<ProductDto> GetProductByIdAsync(Guid productId);
+    public Task<ProductDto> UpdatePriceAsync(Guid productId, float newPrice);
+    public Task DeleteProductAsync(Guid productId);
 }

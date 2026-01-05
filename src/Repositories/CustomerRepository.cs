@@ -9,7 +9,7 @@ namespace EfCoreApiTemplate.src.Repositories;
 
 public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
 {
-    public async Task<CustomerDto> CreateCustomer(CreateCustomerDto createCustomerDto)
+    public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
     {
         createCustomerDto.ValidateOrThrow();
 
@@ -22,11 +22,11 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return entity.ToDto();
     }
 
-    public async Task<CustomerDto> GetCustomerById(Guid customerId)
+    public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
     {
         if (customerId == Guid.Empty)
             throw new ArgumentException($"The Customer ID cannot be empty");
-        
+
         var customer = await dbContext.Customers.FindAsync(customerId);
         if (customer is null)
             throw new ArgumentException($"No customer found with ID '{customerId}'");
@@ -34,7 +34,7 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return customer.ToDto();
     }
 
-    public async Task<CustomerDto> PatchCustomer(CustomerDto customerDto)
+    public async Task<CustomerDto> PatchCustomerAsync(CustomerDto customerDto)
     {
         ArgumentNullException.ThrowIfNull(customerDto);
         if (customerDto.Id == Guid.Empty)
@@ -76,7 +76,7 @@ public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
         return customer.ToDto();
     }
 
-    public async Task DeleteCustomer(Guid customerId)
+    public async Task DeleteCustomerAsync(Guid customerId)
     {
         if (customerId == Guid.Empty)
             throw new ArgumentException($"The Customer ID cannot be empty");

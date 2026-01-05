@@ -12,28 +12,28 @@ public class CustomerController(ICustomerRepository customerRepository) : Contro
     [HttpPost]
     public async Task<ActionResult<CustomerDto>> CreateCustomer(CreateCustomerDto newCustomerDto)
     {
-        var customerDto = await customerRepository.CreateCustomer(newCustomerDto);
+        var customerDto = await customerRepository.CreateCustomerAsync(newCustomerDto);
         return Ok(customerDto);
     }
 
     [HttpGet]
     public async Task<ActionResult<CustomerDto>> GetCustomerById(Guid customerId)
     {
-        var customerDto = await customerRepository.GetCustomerById(customerId);
+        var customerDto = await customerRepository.GetCustomerByIdAsync(customerId);
         return Ok(customerDto);
     }
 
     [HttpPut]
     public async Task<ActionResult<CustomerDto>> PatchCustomer(CustomerDto customerDto)
     {
-        var updatedCustomer = await customerRepository.PatchCustomer(customerDto);
+        var updatedCustomer = await customerRepository.PatchCustomerAsync(customerDto);
         return Ok(updatedCustomer);
     }
 
     [HttpDelete]
     public async Task<IActionResult> DeleteCustomer(Guid customerId)
     {
-        await customerRepository.DeleteCustomer(customerId);
+        await customerRepository.DeleteCustomerAsync(customerId);
         return NoContent();
     }
 
