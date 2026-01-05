@@ -69,6 +69,9 @@ public class OrderService(
         if (order is null)
             throw new ArgumentException($"No order found with ID '{orderId}'");
 
+        if (order.IsCompleted)
+            throw new InvalidOperationException("Cannot modify a completed order");
+
         // add new OrderItem, or increase quantity if it already exists
         var newOrderItems = new List<OrderItem>();
         foreach (var productDto in productsToAdd)
@@ -106,6 +109,9 @@ public class OrderService(
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
             throw new ArgumentException($"No order found with ID '{orderId}'");
+        
+        if (order.IsCompleted)
+            throw new InvalidOperationException("Cannot modify a completed order");
 
         // decrease quantity or remove OrderItem
         var orderItemsToRemove = new List<OrderItem>();
@@ -132,6 +138,9 @@ public class OrderService(
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
             throw new ArgumentException($"No order found with ID '{orderId}'");
+        
+        if (order.IsCompleted)
+            throw new InvalidOperationException("Order is already completed");
 
         order.MarkAsCompleted();
         await orderRepository.SaveChangesAsync();
