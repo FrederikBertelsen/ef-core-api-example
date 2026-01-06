@@ -1,4 +1,5 @@
 using EfCoreApiTemplate.src.DTOs;
+using EfCoreApiTemplate.src.Exceptions;
 using EfCoreApiTemplate.src.Extensions;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using EfCoreApiTemplate.src.Services.Interfaces;
@@ -12,7 +13,7 @@ public class CustomerService(ICustomerRepository customerRepository) : ICustomer
         createCustomerDto.ValidateOrThrow();
 
         if (await customerRepository.CustomerExistsByEmailAsync(createCustomerDto.Email))
-            throw new ArgumentException($"A Customer with Email '{createCustomerDto.Email}' already exists");
+            throw new AlreadyExistsException("Customer", "Email", createCustomerDto.Email);
 
         var newCustomer = createCustomerDto.ToEntity();
 
@@ -25,24 +26,25 @@ public class CustomerService(ICustomerRepository customerRepository) : ICustomer
     public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
     {
         if (customerId == Guid.Empty)
-            throw new ArgumentException($"The Customer ID cannot be empty");
+            throw new MissingValueException("Customer Id");
 
         var customer = await customerRepository.GetCustomerByIdAsync(customerId);
         if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{customerId}'");
+            throw new NotFoundException("Customer", "Id", customerId);
 
         return customer.ToDto();
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customerDto)
     {
-        ArgumentNullException.ThrowIfNull(customerDto);
+        if (customerDto is null)
+            throw new MissingValueException("Customer data");
         if (customerDto.Id == Guid.Empty)
-            throw new ArgumentException("The Customer is missing an ID");
+            throw new MissingValueException("Customer", nameof(customerDto.Id));
 
         var customer = await customerRepository.GetCustomerByIdAsync(customerDto.Id);
         if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{customerDto.Id}'");
+            throw new NotFoundException("Customer", "Id", customerDto.Id);
 
         // update Entity field only if DTO field is not null
         customer.ApplyNonNullValues(customerDto);
@@ -56,11 +58,11 @@ public class CustomerService(ICustomerRepository customerRepository) : ICustomer
     public async Task DeleteCustomerAsync(Guid customerId)
     {
         if (customerId == Guid.Empty)
-            throw new ArgumentException($"The Customer ID cannot be empty");
+            throw new MissingValueException("Customer Id");
 
         var customer = await customerRepository.GetCustomerByIdAsync(customerId);
         if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{customerId}'");
+            throw new NotFoundException("Customer", "Id", customerId);
 
         customerRepository.DeleteCustomer(customer);
         await customerRepository.SaveChangesAsync();

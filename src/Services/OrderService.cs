@@ -1,5 +1,6 @@
 using EfCoreApiTemplate.src.DTOs;
 using EfCoreApiTemplate.src.Entities;
+using EfCoreApiTemplate.src.Exceptions;
 using EfCoreApiTemplate.src.Extensions;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using EfCoreApiTemplate.src.Services.Interfaces;
@@ -18,14 +19,14 @@ public class OrderService(
 
         var customer = await customerRepository.GetCustomerByIdAsync(createOrderDto.CustomerId);
         if (customer is null)
-            throw new ArgumentException($"No customer found with ID '{createOrderDto.CustomerId}'");
+            throw new NotFoundException("Customer", "Id", createOrderDto.CustomerId);
 
         var productIds = createOrderDto.OrderItemDtos.Select(orderItemDto => orderItemDto.ProductId).ToList();
         var products = (await productRepository.GetProductsByIdAsync(productIds)).ToDictionary(product => product.Id);
 
         var missing = productIds.Except(products.Keys).FirstOrDefault();
         if (missing != default)
-            throw new ArgumentException($"No product found with ID '{missing}'");
+            throw new NotFoundException("Product", "Id", missing);
 
 
         var order = new Order
@@ -50,27 +51,27 @@ public class OrderService(
     public async Task<OrderDto> GetOrderByIdAsync(Guid orderId)
     {
         if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
+            throw new MissingValueException("Order Id");
 
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
+            throw new NotFoundException("Order", "Id", orderId);
 
         return order.ToDto();
     }
     public async Task AddProductsToOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToAdd)
     {
         if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
+            throw new MissingValueException("Order Id");
 
         productsToAdd.ValidateOrThrow();
 
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
+            throw new NotFoundException("Order", "Id", orderId);
 
         if (order.IsCompleted)
-            throw new InvalidOperationException("Cannot modify a completed order");
+            throw new BusinessLogicException("Cannot modify a completed order");
 
         // add new OrderItem, or increase quantity if it already exists
         var newOrderItems = new List<OrderItem>();
@@ -102,16 +103,16 @@ public class OrderService(
     public async Task RemoveProductsFromOrderAsync(Guid orderId, ICollection<OrderItemDto> productsToRemove)
     {
         if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
+            throw new MissingValueException("Order Id");
 
         productsToRemove.ValidateOrThrow();
 
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
-        
+            throw new NotFoundException("Order", "Id", orderId);
+
         if (order.IsCompleted)
-            throw new InvalidOperationException("Cannot modify a completed order");
+            throw new BusinessLogicException("Cannot modify a completed order");
 
         // decrease quantity or remove OrderItem
         var orderItemsToRemove = new List<OrderItem>();
@@ -133,14 +134,14 @@ public class OrderService(
     public async Task MarkOrderAsCompletedAsync(Guid orderId)
     {
         if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
+            throw new MissingValueException("Order Id");
 
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
-        
+            throw new NotFoundException("Order", "Id", orderId);
+
         if (order.IsCompleted)
-            throw new InvalidOperationException("Order is already completed");
+            throw new BusinessLogicException("Order is already completed");
 
         order.MarkAsCompleted();
         await orderRepository.SaveChangesAsync();
@@ -149,11 +150,11 @@ public class OrderService(
     public async Task DeleteOrderAsync(Guid orderId)
     {
         if (orderId == Guid.Empty)
-            throw new ArgumentException("orderId cannot be empty");
+            throw new MissingValueException("Order Id");
 
         var order = await orderRepository.GetOrderByIdAsync(orderId);
         if (order is null)
-            throw new ArgumentException($"No order found with ID '{orderId}'");
+            throw new NotFoundException("Order", "Id", orderId);
 
         orderRepository.DeleteOrder(order);
         await orderRepository.SaveChangesAsync();

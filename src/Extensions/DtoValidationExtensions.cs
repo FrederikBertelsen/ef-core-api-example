@@ -1,4 +1,5 @@
 using EfCoreApiTemplate.src.DTOs;
+using EfCoreApiTemplate.src.Exceptions;
 
 namespace EfCoreApiTemplate.src.Extensions;
 
@@ -7,70 +8,76 @@ public static class DtoValidationExtensions
     #region Customer Validations
     public static void ValidateOrThrow(this CreateCustomerDto createCustomerDto)
     {
-        ArgumentNullException.ThrowIfNull(createCustomerDto);
+        if (createCustomerDto is null)
+            throw new MissingValueException("Customer data");
         if (string.IsNullOrWhiteSpace(createCustomerDto.FirstName))
-            throw new ArgumentException("The Customer is missing a FirstName");
+            throw new MissingValueException("Customer", nameof(createCustomerDto.FirstName));
         if (string.IsNullOrWhiteSpace(createCustomerDto.LastName))
-            throw new ArgumentException("The Customer is missing a LastName");
+            throw new MissingValueException("Customer", nameof(createCustomerDto.LastName));
         if (string.IsNullOrWhiteSpace(createCustomerDto.Email))
-            throw new ArgumentException("The Customer is missing an Email");
+            throw new MissingValueException("Customer", nameof(createCustomerDto.Email));
         if (string.IsNullOrWhiteSpace(createCustomerDto.Address))
-            throw new ArgumentException("The Customer is missing an Address");
+            throw new MissingValueException("Customer", nameof(createCustomerDto.Address));
     }
 
     public static void ValidateOrThrow(this CustomerDto CustomerDto)
     {
-        ArgumentNullException.ThrowIfNull(CustomerDto);
+        if (CustomerDto is null)
+            throw new MissingValueException("Customer data");
         if (CustomerDto.Id == Guid.Empty)
-            throw new ArgumentException("The Customer is missing an ID");
+            throw new MissingValueException("Customer", nameof(CustomerDto.Id));
         if (string.IsNullOrWhiteSpace(CustomerDto.FirstName))
-            throw new ArgumentException("The Customer is missing a FirstName");
+            throw new MissingValueException("Customer", nameof(CustomerDto.FirstName));
         if (string.IsNullOrWhiteSpace(CustomerDto.LastName))
-            throw new ArgumentException("The Customer is missing a LastName");
+            throw new MissingValueException("Customer", nameof(CustomerDto.LastName));
         if (string.IsNullOrWhiteSpace(CustomerDto.Email))
-            throw new ArgumentException("The Customer is missing an Email");
+            throw new MissingValueException("Customer", nameof(CustomerDto.Email));
         if (string.IsNullOrWhiteSpace(CustomerDto.Address))
-            throw new ArgumentException("The Customer is missing an Address");
+            throw new MissingValueException("Customer", nameof(CustomerDto.Address));
     }
     #endregion
 
     #region Product Validations
     public static void ValidateOrThrow(this CreateProductDto createProductDto)
     {
-        ArgumentNullException.ThrowIfNull(createProductDto);
+        if (createProductDto is null)
+            throw new MissingValueException("Product data");
         if (string.IsNullOrWhiteSpace(createProductDto.Name))
-            throw new ArgumentException("The Product is missing a Name");
+            throw new MissingValueException("Product", nameof(createProductDto.Name));
         if (createProductDto.Price <= 0)
-            throw new ArgumentException($"The Product's price must be over 0, got '{createProductDto.Price}'");
+            throw new InvalidValueException(nameof(createProductDto.Price), "greater than 0", createProductDto.Price);
     }
 
     public static void ValidateOrThrow(this ProductDto productDto)
     {
-        ArgumentNullException.ThrowIfNull(productDto);
+        if (productDto is null)
+            throw new MissingValueException("Product data");
         if (productDto.Id == Guid.Empty)
-            throw new ArgumentException("The Product is missing an ID");
+            throw new MissingValueException("Product", nameof(productDto.Id));
         if (string.IsNullOrWhiteSpace(productDto.Name))
-            throw new ArgumentException("The Product is missing a Name");
+            throw new MissingValueException("Product", nameof(productDto.Name));
         if (productDto.Price is null)
-            throw new ArgumentException("The Product is missing a Price");
+            throw new MissingValueException("Product", nameof(productDto.Price));
         if (productDto.Price <= 0)
-            throw new ArgumentException($"The Product's price must be over 0, got '{productDto.Price}'");
+            throw new InvalidValueException(nameof(productDto.Price), "greater than 0", productDto.Price);
     }
     #endregion
 
     #region Order Validations
     public static void ValidateOrThrow(this CreateOrderDto createOrderDto)
     {
-        ArgumentNullException.ThrowIfNull(createOrderDto);
-        ArgumentNullException.ThrowIfNull(createOrderDto.OrderItemDtos);
+        if (createOrderDto is null)
+            throw new MissingValueException("Order data");
+        if (createOrderDto.OrderItemDtos is null)
+            throw new MissingValueException("Order", nameof(createOrderDto.OrderItemDtos));
         if (createOrderDto.CustomerId == Guid.Empty)
-            throw new ArgumentException("CustomerId cannot be empty");
+            throw new MissingValueException("Order", nameof(createOrderDto.CustomerId));
         if (createOrderDto.OrderItemDtos.Count == 0)
-            throw new ArgumentException("At least one order item must be provided to create an order");
-        if (createOrderDto.OrderItemDtos.Any(createOrderItemDto => createOrderItemDto.ProductId == Guid.Empty))
-            throw new ArgumentException("OrderItems' ProductId cannot be empty");
-        if (createOrderDto.OrderItemDtos.Any(createOrderItemDto => createOrderItemDto.Quantity <= 0))
-            throw new ArgumentException("OrderItems must have a quantity higher than zero");
+            throw new InvalidValueException(nameof(createOrderDto.OrderItemDtos), "at least one item");
+        if (createOrderDto.OrderItemDtos.Any(item => item.ProductId == Guid.Empty))
+            throw new MissingValueException("Order Item", nameof(CreateOrderItemDto.ProductId));
+        if (createOrderDto.OrderItemDtos.Any(item => item.Quantity <= 0))
+            throw new InvalidValueException(nameof(CreateOrderItemDto.Quantity), "greater than 0");
 
         // check for duplicate product IDs in order items
         var duplicateProductIds = createOrderDto.OrderItemDtos
@@ -79,21 +86,23 @@ public static class DtoValidationExtensions
             .Select(g => g.Key)
             .ToList();
         if (duplicateProductIds.Count > 0)
-            throw new ArgumentException($"Duplicate ProductIds found in order items: {string.Join(", ", duplicateProductIds)}");
+            throw new InvalidValueException(nameof(createOrderDto.OrderItemDtos), $"unique ProductIds. Found duplicates: {string.Join(", ", duplicateProductIds)}");
     }
 
     public static void ValidateOrThrow(this OrderItemDto orderItemDto)
     {
-        ArgumentNullException.ThrowIfNull(orderItemDto);
+        if (orderItemDto is null)
+            throw new MissingValueException("Order Item data");
         if (orderItemDto.Product.Id == Guid.Empty)
-            throw new ArgumentException("OrderItem's ProductId cannot be empty");
+            throw new MissingValueException("Order Item", nameof(orderItemDto.Product.Id));
         if (orderItemDto.Quantity <= 0)
-            throw new ArgumentException("OrderItem must have a quantity higher than zero");
+            throw new InvalidValueException(nameof(orderItemDto.Quantity), "greater than 0");
     }
 
     public static void ValidateOrThrow(this ICollection<OrderItemDto> orderItemDtos)
     {
-        ArgumentNullException.ThrowIfNull(orderItemDtos);
+        if (orderItemDtos is null)
+            throw new MissingValueException("Order Items");
 
         foreach (var orderItemDto in orderItemDtos)
             orderItemDto.ValidateOrThrow();

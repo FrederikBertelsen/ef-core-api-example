@@ -1,4 +1,5 @@
 using EfCoreApiTemplate.src.DTOs;
+using EfCoreApiTemplate.src.Exceptions;
 using EfCoreApiTemplate.src.Extensions;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using EfCoreApiTemplate.src.Services.Interfaces;
@@ -12,7 +13,7 @@ public class ProductService(IProductRepository productRepository) : IProductServ
         createProductDto.ValidateOrThrow();
 
         if (await productRepository.ProductExistsByNameAsync(createProductDto.Name))
-            throw new ArgumentException($"A Product with Name '{createProductDto.Name}' already exists");
+            throw new AlreadyExistsException("Product", "Name", createProductDto.Name);
 
         var product = createProductDto.ToEntity();
 
@@ -25,11 +26,11 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public async Task<ProductDto> GetProductByIdAsync(Guid productId)
     {
         if (productId == Guid.Empty)
-            throw new ArgumentException("The Product ID cannot be empty");
+            throw new MissingValueException("Product Id");
 
         var product = await productRepository.GetProductByIdAsync(productId);
         if (product is null)
-            throw new ArgumentException($"No Product found with ID '{productId}'");
+            throw new NotFoundException("Product", "Id", productId);
 
         return product.ToDto();
     }
@@ -37,28 +38,29 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public async Task<ProductDto> GetProductByNameAsync(string productName)
     {
         if (string.IsNullOrWhiteSpace(productName))
-            throw new ArgumentException("The Product Name cannot be empty");
+            throw new MissingValueException("Product Name");
 
         var product = await productRepository.GetProductByNameAsync(productName);
         if (product is null)
-            throw new ArgumentException($"No Product found with Name '{productName}'");
+            throw new NotFoundException("Product", "Name", productName);
 
         return product.ToDto();
     }
 
     public async Task<ProductDto> UpdateProductAsync(ProductDto productDto)
     {
-        ArgumentNullException.ThrowIfNull(productDto);
+        if (productDto is null)
+            throw new MissingValueException("Product data");
         if (productDto.Id == Guid.Empty)
-            throw new ArgumentException("The Product is missing an ID");
+            throw new MissingValueException("Product", nameof(productDto.Id));
         if (productDto.Name is not null && productDto.Name.Trim().Length == 0)
-            throw new ArgumentException("The Product Name cannot be empty");
+            throw new InvalidValueException(nameof(productDto.Name), "non-empty");
         if (productDto.Price is not null && productDto.Price <= 0)
-            throw new ArgumentException($"The Product's price must be over 0, got '{productDto.Price}'");
+            throw new InvalidValueException(nameof(productDto.Price), "greater than 0", productDto.Price);
 
         var product = await productRepository.GetProductByIdAsync(productDto.Id);
         if (product is null)
-            throw new ArgumentException($"No Product found with ID '{productDto.Id}'");
+            throw new NotFoundException("Product", "Id", productDto.Id);
 
         // update Entity field only if DTO field is not null
         product.ApplyNonNullValues(productDto);
@@ -72,11 +74,11 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public async Task DeleteProductAsync(Guid productId)
     {
         if (productId == Guid.Empty)
-            throw new ArgumentException("The Product ID cannot be empty");
+            throw new MissingValueException("Product Id");
 
         var product = await productRepository.GetProductByIdAsync(productId);
         if (product is null)
-            throw new ArgumentException($"No Product found with ID '{productId}'");
+            throw new NotFoundException("Product", "Id", productId);
 
         productRepository.DeleteProduct(product);
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using EfCoreApiTemplate.src.Exceptions;
 
 namespace EfCoreApiTemplate.src.Entities;
 
@@ -11,7 +12,7 @@ public class Order : BaseEntity
     public void MarkAsCompleted()
     {
         if (IsCompleted)
-            throw new InvalidOperationException("Order is already marked as complete");
+            throw new BusinessLogicException("Order is already marked as complete");
 
         IsCompleted = true;
     }
