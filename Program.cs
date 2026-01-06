@@ -1,4 +1,5 @@
 using EfCoreApiTemplate.src.Data;
+using EfCoreApiTemplate.src.Middleware;
 using EfCoreApiTemplate.src.Repositories;
 using EfCoreApiTemplate.src.Repositories.Interfaces;
 using EfCoreApiTemplate.src.Services;
@@ -37,6 +38,8 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
