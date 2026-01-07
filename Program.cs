@@ -5,6 +5,7 @@ using EfCoreApiExample.src.Repositories.Interfaces;
 using EfCoreApiExample.src.Services;
 using EfCoreApiExample.src.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +47,20 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Ensure database exist and apply any pending migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        db.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An error occurred while initialising the database.");
+        throw;
+    }
+}
 
 app.Run();
