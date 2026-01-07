@@ -1,4 +1,4 @@
-namespace EfCoreApiTemplate.src.Entities;
+namespace EfCoreApiExample.src.Entities;
 
 public abstract class BaseEntity
 {

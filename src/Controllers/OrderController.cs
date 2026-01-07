@@ -1,8 +1,8 @@
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Services.Interfaces;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EfCoreApiTemplate.src.Controllers;
+namespace EfCoreApiExample.src.Controllers;
 
 [Route("api/orders")]
 [ApiController]

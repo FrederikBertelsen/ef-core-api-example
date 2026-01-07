@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EfCoreApiTemplate.src.Data.Migrations
+namespace EfCoreApiExample.src.Data.Migrations
 {
     /// <inheritdoc />
     public partial class RenameModelToEntity : Migration

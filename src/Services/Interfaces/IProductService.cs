@@ -1,6 +1,6 @@
-using EfCoreApiTemplate.src.DTOs;
+using EfCoreApiExample.src.DTOs;
 
-namespace EfCoreApiTemplate.src.Services.Interfaces;
+namespace EfCoreApiExample.src.Services.Interfaces;
 
 public interface IProductService
 {

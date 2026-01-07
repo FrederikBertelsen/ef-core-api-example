@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EfCoreApiTemplate.src.Entities;
+namespace EfCoreApiExample.src.Entities;
 
 public class Customer : BaseEntity
 {

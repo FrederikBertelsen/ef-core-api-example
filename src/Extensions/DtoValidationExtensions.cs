@@ -1,7 +1,7 @@
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Exceptions;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Exceptions;
 
-namespace EfCoreApiTemplate.src.Extensions;
+namespace EfCoreApiExample.src.Extensions;
 
 public static class DtoValidationExtensions
 {

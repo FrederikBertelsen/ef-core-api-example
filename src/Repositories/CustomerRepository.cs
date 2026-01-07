@@ -1,9 +1,9 @@
-using EfCoreApiTemplate.src.Data;
-using EfCoreApiTemplate.src.Entities;
-using EfCoreApiTemplate.src.Repositories.Interfaces;
+using EfCoreApiExample.src.Data;
+using EfCoreApiExample.src.Entities;
+using EfCoreApiExample.src.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EfCoreApiTemplate.src.Repositories;
+namespace EfCoreApiExample.src.Repositories;
 
 public class CustomerRepository(AppDbContext dbContext) : ICustomerRepository
 {

@@ -1,10 +1,10 @@
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Exceptions;
-using EfCoreApiTemplate.src.Extensions;
-using EfCoreApiTemplate.src.Repositories.Interfaces;
-using EfCoreApiTemplate.src.Services.Interfaces;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Exceptions;
+using EfCoreApiExample.src.Extensions;
+using EfCoreApiExample.src.Repositories.Interfaces;
+using EfCoreApiExample.src.Services.Interfaces;
 
-namespace EfCoreApiTemplate.src.Services;
+namespace EfCoreApiExample.src.Services;
 
 public class ProductService(IProductRepository productRepository) : IProductService
 {

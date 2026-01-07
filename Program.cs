@@ -1,9 +1,9 @@
-using EfCoreApiTemplate.src.Data;
-using EfCoreApiTemplate.src.Middleware;
-using EfCoreApiTemplate.src.Repositories;
-using EfCoreApiTemplate.src.Repositories.Interfaces;
-using EfCoreApiTemplate.src.Services;
-using EfCoreApiTemplate.src.Services.Interfaces;
+using EfCoreApiExample.src.Data;
+using EfCoreApiExample.src.Middleware;
+using EfCoreApiExample.src.Repositories;
+using EfCoreApiExample.src.Repositories.Interfaces;
+using EfCoreApiExample.src.Services;
+using EfCoreApiExample.src.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

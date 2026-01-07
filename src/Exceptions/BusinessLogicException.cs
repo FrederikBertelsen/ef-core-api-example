@@ -1,6 +1,6 @@
-using EfCoreApiTemplate.src.Exceptions.Interfaces;
+using EfCoreApiExample.src.Exceptions.Interfaces;
 
-namespace EfCoreApiTemplate.src.Exceptions;
+namespace EfCoreApiExample.src.Exceptions;
 
 public class BusinessLogicException(string message) : Exception(message.ToLower()), ICustomHttpException
 {

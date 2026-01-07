@@ -1,4 +1,4 @@
-namespace EfCoreApiTemplate.src.DTOs;
+namespace EfCoreApiExample.src.DTOs;
 
 public record CreateProductDto(
     string Name,

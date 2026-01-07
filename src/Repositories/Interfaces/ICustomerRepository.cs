@@ -1,6 +1,6 @@
-using EfCoreApiTemplate.src.Entities;
+using EfCoreApiExample.src.Entities;
 
-namespace EfCoreApiTemplate.src.Repositories.Interfaces;
+namespace EfCoreApiExample.src.Repositories.Interfaces;
 
 public interface ICustomerRepository
 {

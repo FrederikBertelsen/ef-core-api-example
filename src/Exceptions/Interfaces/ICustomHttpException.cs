@@ -1,4 +1,4 @@
-namespace EfCoreApiTemplate.src.Exceptions.Interfaces;
+namespace EfCoreApiExample.src.Exceptions.Interfaces;
 
 public interface ICustomHttpException
 {

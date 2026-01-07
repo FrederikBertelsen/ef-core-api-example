@@ -1,7 +1,7 @@
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Entities;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Entities;
 
-namespace EfCoreApiTemplate.src.Repositories.Interfaces;
+namespace EfCoreApiExample.src.Repositories.Interfaces;
 
 public interface IProductRepository
 {

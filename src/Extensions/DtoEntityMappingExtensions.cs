@@ -1,8 +1,8 @@
 using System.Reflection;
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Entities;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Entities;
 
-namespace EfCoreApiTemplate.src.Extensions;
+namespace EfCoreApiExample.src.Extensions;
 
 public static class EntityDtoMappingExtensions
 {

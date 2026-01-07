@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using EfCoreApiTemplate.src.Exceptions;
+using EfCoreApiExample.src.Exceptions;
 
-namespace EfCoreApiTemplate.src.Entities;
+namespace EfCoreApiExample.src.Entities;
 
 public class Order : BaseEntity
 {

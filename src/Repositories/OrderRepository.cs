@@ -1,11 +1,11 @@
-using EfCoreApiTemplate.src.Data;
-using EfCoreApiTemplate.src.DTOs;
-using EfCoreApiTemplate.src.Entities;
-using EfCoreApiTemplate.src.Extensions;
-using EfCoreApiTemplate.src.Repositories.Interfaces;
+using EfCoreApiExample.src.Data;
+using EfCoreApiExample.src.DTOs;
+using EfCoreApiExample.src.Entities;
+using EfCoreApiExample.src.Extensions;
+using EfCoreApiExample.src.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace EfCoreApiTemplate.src.Repositories;
+namespace EfCoreApiExample.src.Repositories;
 
 public class OrderRepository(AppDbContext dbContext) : IOrderRepository
 {
