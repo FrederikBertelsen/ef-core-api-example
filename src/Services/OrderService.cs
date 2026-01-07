@@ -122,8 +122,10 @@ public class OrderService(
             if (existingItem != null)
             {
                 existingItem.Quantity -= productDto.Quantity;
-                if (existingItem.Quantity <= 0)
+                if (existingItem.Quantity == 0)
                     orderItemsToRemove.Add(existingItem);
+                else if (existingItem.Quantity < 0)
+                    throw new BusinessLogicException($"Cannot remove more items than exist for Product Id '{productDto.Product.Id}'");
             }
         }
 
