@@ -27,10 +27,10 @@ public class Order : BaseEntity
         float total = 0f;
         foreach (var orderItem in OrderItems)
         {
-            if (orderItem == null || orderItem.Product == null || orderItem.Product.Price == null)
+            if (orderItem == null || orderItem.Product == null)
                 continue;
 
-            total += (float)orderItem.Product.Price * orderItem.Quantity;
+            total += orderItem.Product.Price * orderItem.Quantity;
         }
 
         return total;
