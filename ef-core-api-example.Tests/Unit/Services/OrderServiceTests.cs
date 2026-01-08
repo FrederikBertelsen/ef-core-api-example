@@ -220,12 +220,11 @@ public class OrderServiceTests
         Assert.Contains(orderId.ToString(), exception.Message);
     }
 
-    [Theory]
-    [InlineData("00000000-0000-0000-0000-000000000000")]
-    public async Task GetOrderByIdAsync_WhenIdIsEmpty_ThrowsMissingValueException(string guidString)
+    [Fact]
+    public async Task GetOrderByIdAsync_WhenIdIsEmpty_ThrowsMissingValueException()
     {
         // Arrange
-        var orderId = Guid.Parse(guidString);
+        var orderId = Guid.Empty;
 
         // Act & Assert
         await Assert.ThrowsAsync<MissingValueException>(() => _orderService.GetOrderByIdAsync(orderId));
@@ -244,10 +243,20 @@ public class OrderServiceTests
 
         var product = new Product { Id = productId, Name = "Oven", Price = 2400f };
 
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
 
@@ -297,10 +306,20 @@ public class OrderServiceTests
         var orderId = Guid.NewGuid();
         var productId = Guid.NewGuid();
 
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
         order.MarkAsCompleted();
@@ -320,12 +339,11 @@ public class OrderServiceTests
         await _orderItemRepository.Received(0).SaveChangesAsync();
     }
 
-    [Theory]
-    [InlineData("00000000-0000-0000-0000-000000000000")]
-    public async Task AddProductsToOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException(string guidString)
+    [Fact]
+    public async Task AddProductsToOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException()
     {
         // Arrange
-        var orderId = Guid.Parse(guidString);
+        var orderId = Guid.Empty;
         var productsToAdd = new List<OrderItemDto>
         {
             new(new ProductDto(Guid.NewGuid(), "Laptop", 4000f), 2)
@@ -350,19 +368,32 @@ public class OrderServiceTests
 
         var product = new Product { Id = productId, Name = "Oven", Price = 5500f };
 
-        var orderItem = new OrderItem
+        var customer = new Customer
         {
-            OrderId = orderId,
-            Product = product,
-            Quantity = 5
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
         };
 
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
-            OrderItems = [orderItem]
+            CustomerId = customer.Id,
+            Customer = customer,
+            OrderItems = []
         };
+
+        var orderItem = new OrderItem
+        {
+            OrderId = orderId,
+            Order = order,
+            Product = product,
+            Quantity = 5
+        };
+
+        order.OrderItems.Add(orderItem);
 
         var productsToRemove = new List<OrderItemDto>
         {
@@ -388,19 +419,32 @@ public class OrderServiceTests
 
         var product = new Product { Id = productId, Name = "Fridge", Price = 5200f };
 
-        var orderItem = new OrderItem
+        var customer = new Customer
         {
-            OrderId = orderId,
-            Product = product,
-            Quantity = 2
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
         };
 
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
-            OrderItems = [orderItem]
+            CustomerId = customer.Id,
+            Customer = customer,
+            OrderItems = []
         };
+
+        var orderItem = new OrderItem
+        {
+            OrderId = orderId,
+            Order = order,
+            Product = product,
+            Quantity = 2
+        };
+
+        order.OrderItems.Add(orderItem);
 
         var productsToRemove = new List<OrderItemDto>
         {
@@ -426,19 +470,32 @@ public class OrderServiceTests
 
         var product = new Product { Id = productId, Name = "Fridge", Price = 5200f };
 
-        var orderItem = new OrderItem
+        var customer = new Customer
         {
-            OrderId = orderId,
-            Product = product,
-            Quantity = 2
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
         };
 
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
-            OrderItems = [orderItem]
+            CustomerId = customer.Id,
+            Customer = customer,
+            OrderItems = []
         };
+
+        var orderItem = new OrderItem
+        {
+            OrderId = orderId,
+            Order = order,
+            Product = product,
+            Quantity = 2
+        };
+
+        order.OrderItems.Add(orderItem);
 
         var productsToRemove = new List<OrderItemDto>
         {
@@ -484,10 +541,20 @@ public class OrderServiceTests
         var orderId = Guid.NewGuid();
         var productId = Guid.NewGuid();
 
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
         order.MarkAsCompleted();
@@ -507,12 +574,11 @@ public class OrderServiceTests
         await _orderItemRepository.Received(0).SaveChangesAsync();
     }
 
-    [Theory]
-    [InlineData("00000000-0000-0000-0000-000000000000")]
-    public async Task RemoveProductsFromOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException(string guidString)
+    [Fact]
+    public async Task RemoveProductsFromOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException()
     {
         // Arrange
-        var orderId = Guid.Parse(guidString);
+        var orderId = Guid.Empty;
         var productsToRemove = new List<OrderItemDto>
         {
             new(new ProductDto(Guid.NewGuid(), "Phone", 3500f), 20)
@@ -535,10 +601,20 @@ public class OrderServiceTests
         // Arrange
         var orderId = Guid.NewGuid();
 
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
 
@@ -575,10 +651,20 @@ public class OrderServiceTests
         // Arrange
         var orderId = Guid.NewGuid();
 
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
         order.MarkAsCompleted();
@@ -593,12 +679,11 @@ public class OrderServiceTests
         await _orderRepository.Received(0).SaveChangesAsync();
     }
 
-    [Theory]
-    [InlineData("00000000-0000-0000-0000-000000000000")]
-    public async Task MarkOrderAsCompletedAsync_WhenIdIsEmpty_ThrowsMissingValueException(string guidString)
+    [Fact]
+    public async Task MarkOrderAsCompletedAsync_WhenIdIsEmpty_ThrowsMissingValueException()
     {
         // Arrange
-        var orderId = Guid.Parse(guidString);
+        var orderId = Guid.Empty;
 
         // Act & Assert
         await Assert.ThrowsAsync<MissingValueException>(() => _orderService.MarkOrderAsCompletedAsync(orderId));
@@ -613,10 +698,20 @@ public class OrderServiceTests
     {
         // Arrange
         var orderId = Guid.NewGuid();
+        var customer = new Customer
+        {
+            Id = Guid.NewGuid(),
+            FirstName = "Ole",
+            LastName = "Olesen",
+            Email = "Ole@test.com",
+            Address = "123 Ole St"
+        };
+
         var order = new Order
         {
             Id = orderId,
-            CustomerId = Guid.NewGuid(),
+            CustomerId = customer.Id,
+            Customer = customer,
             OrderItems = []
         };
 
@@ -647,12 +742,11 @@ public class OrderServiceTests
         await _orderRepository.Received(0).SaveChangesAsync();
     }
 
-    [Theory]
-    [InlineData("00000000-0000-0000-0000-000000000000")]
-    public async Task DeleteOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException(string guidString)
+    [Fact]
+    public async Task DeleteOrderAsync_WhenIdIsEmpty_ThrowsMissingValueException()
     {
         // Arrange
-        var orderId = Guid.Parse(guidString);
+        var orderId = Guid.Empty;
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<MissingValueException>(() => _orderService.DeleteOrderAsync(orderId));

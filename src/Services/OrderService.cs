@@ -37,6 +37,7 @@ public class OrderService(
             OrderItems = createOrderDto.OrderItemDtos
             .Select(orderItemDto => new OrderItem
             {
+                Order = null!, // will be set by EF Core
                 Product = products[orderItemDto.ProductId],
                 Quantity = orderItemDto.Quantity
             })

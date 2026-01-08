@@ -6,7 +6,7 @@ namespace EfCoreApiExample.src.Entities;
 public class Order : BaseEntity
 {
     public Guid CustomerId { get; set; }
-    public Customer? Customer { get; init; }
+    public required Customer Customer { get; init; }
     public required ICollection<OrderItem> OrderItems { get; init; }
     public bool IsCompleted { get; private set; } = false;
     public void MarkAsCompleted()
